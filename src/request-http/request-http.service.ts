@@ -3,15 +3,8 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import axios, { AxiosResponse } from 'axios';
-import { CreateRequestHttpDto } from './dto/create-request-http.dto';
-import { UpdateRequestHttpDto } from './dto/update-request-http.dto';
 import { map } from 'rxjs/operators';
-
-interface RequestData {
-  body?: string;
-  queryString?: string;
-  pathVariable?: string;
-}
+import { PostStoreTransactionRequestDto } from 'src/interface/PostStoreTransactionRequestDto';
 
 @Injectable()
 export class RequestHttpService {
@@ -22,14 +15,17 @@ export class RequestHttpService {
       .get(url)
       .toPromise()
       .then((response) => response.data)
-      .catch((err) => err);
+      .catch(() => Promise.reject(url));
   }
 
-  async postData(url: string): Promise<AxiosResponse<any[]>> {
+  async postData(
+    url: string,
+    body: PostStoreTransactionRequestDto,
+  ): Promise<AxiosResponse<any[]>> {
     return this.httpService
-      .post(url)
+      .post(url, body)
       .toPromise()
       .then((response) => response.data)
-      .catch((err) => err);
+      .catch(() => Promise.reject(url));
   }
 }

@@ -1,30 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMergeTransactionDto } from './dto/create-merge-transaction.dto';
-import { UpdateMergeTransactionDto } from './dto/update-merge-transaction.dto';
+import { MergeTransaction } from 'src/interface/MergeTransaction';
+import { LowdbService } from 'src/lowdb/lowdb.service';
 
 @Injectable()
 export class MergeTransactionsService {
-  async insertMergeTransactions() {}
+  constructor(private readonly lowdbService: LowdbService) {}
 
-  async findAll() {}
+  async insertMergeTransactions(mergeTransactions: MergeTransaction[]) {
+    const allMergeTransaction =
+      await this.lowdbService.findAllMergeTransactions();
 
-  // create(createMergeTransactionDto: CreateMergeTransactionDto) {
-  //   return 'This action adds a new mergeTransaction';
-  // }
+    await this.lowdbService.insertMergeTransactions(
+      mergeTransactions.filter((value) => {
+        return this.isExistMergeTransaction(value, allMergeTransaction);
+      }),
+    );
+  }
 
-  // findAll() {
-  //   return `This action returns all mergeTransactions`;
-  // }
+  async findAll() {
+    return await this.lowdbService.findAllMergeTransactions();
+  }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} mergeTransaction`;
-  // }
-
-  // update(id: number, updateMergeTransactionDto: UpdateMergeTransactionDto) {
-  //   return `This action updates a #${id} mergeTransaction`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} mergeTransaction`;
-  // }
+  private isExistMergeTransaction = (
+    val: MergeTransaction,
+    transactions: MergeTransaction[],
+  ): boolean => {
+    for (let i = 0; i < transactions.length; i++) {
+      if (transactions[i].transactionId === val.transactionId) {
+        return false;
+      }
+    }
+    return true;
+  };
 }
