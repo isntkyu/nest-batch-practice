@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { StoreTransactionsService } from './store-transactions.service';
 
-@Controller('transactions')
+@Controller('store-transactions')
 export class StoreTransactionsController {
   constructor(
     private readonly storeTransactionsService: StoreTransactionsService,
