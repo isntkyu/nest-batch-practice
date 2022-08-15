@@ -5,7 +5,7 @@
 
 ---
 
-- /transactions/retry, **POST**
+<!-- - /transactions/retry, **POST**
 
   - 실패한 트랜잭션 데이터 요청 재시도.
 
@@ -23,3 +23,4 @@
 
 - /batch/logs, **GET**
   - 배치 로그 조회
+-->
